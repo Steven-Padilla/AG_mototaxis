@@ -10,7 +10,7 @@ class AlgoritmoGenetico:
         n_pasajeros = 8
         self.n_mutaciones = 2
         self.n_individuos = 8
-        self.n_generaciones = 10
+        self.n_generaciones = 15
         self.k = 3
         self.ancho_moto = 150
         self.id_indiv = 1
@@ -73,6 +73,7 @@ class AlgoritmoGenetico:
                 else:
                     aux_indv2 += 1
         self.crear_individuo(resultado,True)
+        print(len(self.poblacion))
         
     def crear_individuo(self,data,is_nueva_poblacion):
         aptitud_del_indiv=self.calc_aptitud_de_indv(data)
@@ -117,21 +118,33 @@ class AlgoritmoGenetico:
     
        
     def poda(self):
+        self.ordenar_poblacion()
         while len(self.poblacion)!=self.n_individuos:
             self.poblacion.pop()
+        self.ordenar_poblacion()
+        self.mejor_individuo.append(self.poblacion[0])
+        self.peor_individuo.append(self.poblacion[self.n_individuos-1])
+        print(len(self.pasajeros))
     def ordenar_poblacion(self):
         self.poblacion.sort(key=lambda x: x.ganancia, reverse=True)
 
     def grafica1(self):
-        list_aptitud = []
+        list_mejores_aptitud = []
+        list_peores_aptitud = []
         list_epocas = []
         for i in range(self.n_generaciones):
             list_epocas.append(i+1)  
         for k in self.mejor_individuo:
-            list_aptitud.append(k.ganancia)
-        print(list_aptitud)    
+            list_mejores_aptitud.append(k.ganancia)
+        for j in self.peor_individuo:
+            list_peores_aptitud.append(j.ganancia)
+
+        print(list_mejores_aptitud)    
+        print(list_peores_aptitud)    
         fig, ax = plt.subplots()
-        ax.bar(list_epocas, list_aptitud)
+        ax.plot(list_epocas, list_mejores_aptitud,label='Mejores Aptitud')
+        ax.plot(list_epocas, list_peores_aptitud, color='red',label='Peores Aptitud')
+        ax.legend(loc='upper right')
         plt.show()    
 
 
@@ -164,17 +177,14 @@ if __name__ == '__main__':
 
         #Mutacion
         algoritmo.mutacion()
-        algoritmo.ordenar_poblacion()
 
         algoritmo.poda()
         #algoritmo.mejor_ganancia()
         
         print(f'Población post cruza y mutacion generacion {x+1}')
-        # print(f'Mejor individuo: {algoritmo.mejor_individuo}')
-        algoritmo.mejor_individuo.append(algoritmo.poblacion[0])
-        algoritmo.peor_individuo.append(algoritmo.poblacion[len(algoritmo.poblacion)-1])
+        print(f'Numero de poblacion: {len(algoritmo.nueva_poblacion)}')
         print(f'Mejor individuo: {algoritmo.poblacion[0]}')
-        print(f'Peor individuo: {algoritmo.poblacion[len(algoritmo.poblacion)-1]}')
+        print(f'Peor individuo: {algoritmo.poblacion[algoritmo.n_individuos-1]}')
         for indv in algoritmo.poblacion:
             print(indv)
         x+=1
