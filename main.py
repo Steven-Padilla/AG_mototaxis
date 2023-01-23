@@ -18,8 +18,8 @@ class AlgoritmoGenetico:
         self.pasajeros = crear_pasajeros(n_pasajeros)
         self.poblacion = []
         self.nueva_poblacion=[]
-        self.mejor_individuo={'id':0,'ganancia':0}
-        self.peor_individuo={'id':0,'ganancia':0}
+        self.mejor_individuo=[]
+        self.peor_individuo=[]
         self.primera_gen()
 
     def primera_gen(self):
@@ -125,11 +125,11 @@ class AlgoritmoGenetico:
     def grafica1(self):
         list_aptitud = []
         list_epocas = []
-        self.mejor_individuo.append(self.poblacion[0])
         for i in range(self.n_generaciones):
-            list_epocas.append(i)  
+            list_epocas.append(i+1)  
         for k in self.mejor_individuo:
-            list_aptitud.append(k)    
+            list_aptitud.append(k.ganancia)
+        print(list_aptitud)    
         fig, ax = plt.subplots()
         ax.bar(list_epocas, list_aptitud)
         plt.show()    
@@ -171,11 +171,12 @@ if __name__ == '__main__':
         
         print(f'Población post cruza y mutacion generacion {x+1}')
         # print(f'Mejor individuo: {algoritmo.mejor_individuo}')
+        algoritmo.mejor_individuo.append(algoritmo.poblacion[0])
+        algoritmo.peor_individuo.append(algoritmo.poblacion[len(algoritmo.poblacion)-1])
         print(f'Mejor individuo: {algoritmo.poblacion[0]}')
         print(f'Peor individuo: {algoritmo.poblacion[len(algoritmo.poblacion)-1]}')
         for indv in algoritmo.poblacion:
             print(indv)
         x+=1
-    print(f'Cantidad de nueva poblacion: {len(algoritmo.nueva_poblacion)}')
     algoritmo.grafica1()
     
