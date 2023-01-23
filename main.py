@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 from Algoritmos import crear_pasajeros, generar_rango_cruza, generar_primer_p, arr_numeros, llenar_resultado
 from Individuo import Individuo
 
@@ -12,7 +13,6 @@ class AlgoritmoGenetico:
         self.n_generaciones = 10
         self.k = 3
         self.ancho_moto = 150
-
         self.id_indiv = 1
         self.cant_genes = arr_numeros(self.n_individuos)
         self.pasajeros = crear_pasajeros(n_pasajeros)
@@ -122,6 +122,18 @@ class AlgoritmoGenetico:
     def ordenar_poblacion(self):
         self.poblacion.sort(key=lambda x: x.ganancia, reverse=True)
 
+    def grafica1(self):
+        list_aptitud = []
+        list_epocas = []
+        self.mejor_individuo.append(self.poblacion[0])
+        for i in range(self.n_generaciones):
+            list_epocas.append(i)  
+        for k in self.mejor_individuo:
+            list_aptitud.append(k)    
+        fig, ax = plt.subplots()
+        ax.bar(list_epocas, list_aptitud)
+        plt.show()    
+
 
 
 # def print_grafica(algoritmo):
@@ -155,7 +167,7 @@ if __name__ == '__main__':
         algoritmo.ordenar_poblacion()
 
         algoritmo.poda()
-        algoritmo.mejor_ganancia()
+        #algoritmo.mejor_ganancia()
         
         print(f'Población post cruza y mutacion generacion {x+1}')
         # print(f'Mejor individuo: {algoritmo.mejor_individuo}')
@@ -165,4 +177,5 @@ if __name__ == '__main__':
             print(indv)
         x+=1
     print(f'Cantidad de nueva poblacion: {len(algoritmo.nueva_poblacion)}')
+    algoritmo.grafica1()
     
